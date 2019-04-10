@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>W02: Task 01</title>
+  </head>
+  <body>
+    <script>
+      Vec3 = function( x, y, z)
+      {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      }
+      Vec3.prototype.min = function()
+      {
+      return v.x;
+      }
+      Vec3.prototype.mid = function()
+      {
+      return v.y;
+      }
+      Vec3.prototype.max = function()
+      {
+      return v.z;
+      }
+      Vec3.prototype.sort = function()
+      {
+      var temp = 0;
+      if(v.x > v.y)
+      {
+      temp = v.y;
+      v.y = v.x;
+      v.x = temp;
+      }
+      if(v.y > v.z)
+      {
+      temp = v.z;
+      v.z = v.y;
+      v.y = temp;
+      }
+      if(v.y < v.x)
+      {
+      temp = v.y;
+      v.y = v.x;
+      v.x = temp;
+      }
+      return v;
+      }
+      var x = -1, y = -111, z = 1;
+      var v = new Vec3( x, y, z );
+      var s = v.sort();
+      var min = s.min();
+      var mid = s.mid();
+      var max = s.max();
+      document.write("min = ",min);
+      document.write("<br>\n");
+      document.write("mid = ",mid);
+      document.write("<br>\n");
+      document.write("max = ",max);
+    </script>
+  </body>
+</html>
