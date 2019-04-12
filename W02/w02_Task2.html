@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>W02: Task 02</title>
+  </head>
+  <body>
+    <font size="5" color="#0066ff">Calculate the area of triangle</font><br>
+
+    <form id="main_form">
+    Vector0: x = <input type="number" id="in_x0"/>
+    y = <input type="number" id="in_y0"/>
+    z = <input type="number" id="in_z0"/><br>
+    Vector1: x = <input type="number" id="in_x1"/>
+    y = <input type="number" id="in_y1"/>
+    z = <input type="number" id="in_z1"/><br>
+    Vector2: x = <input type="number" id="in_x2"/>
+    y = <input type="number" id="in_y2"/>
+    z = <input type="number" id="in_z2"/><br>
+    <input type="button" value="execute" id="exec" onclick="onButtonClick();"/><br>
+    Answer: <div id="ans"></div>
+    </form>
+
+    <script>
+      Vec3 = function( x, y, z)
+      {
+	  this.x = x;
+	  this.y = y;
+	  this.z = z;
+      }
+      function two_distance( p, q )
+      {
+	  var d = Math.sqrt(Math.pow((p.x - q.x),2)
+			    +Math.pow((p.y - q.y),2)
+			    +Math.pow((p.z - q.z),2));
+	  return d;
+      }
+      function AreaOfTriangle( a, b, c )
+      {
+	  var n = (a+b+c)/2;
+	  var S = Math.sqrt(n*(n-a)*(n-b)*(n-c));
+	  return S;
+      }
+      function onButtonClick()
+      {
+	  main();
+      }
+
+      function main()
+      {
+      var x0 = document.forms.main_form.in_x0.value, y0 = document.forms.main_form.in_y0.value, z0 = document.forms.main_form.in_z0.value;
+      var x1 = document.forms.main_form.in_x1.value, y1 = document.forms.main_form.in_y1.value, z1 = document.forms.main_form.in_z1.value;
+      var x2 = document.forms.main_form.in_x2.value, y2 = document.forms.main_form.in_y2.value, z2 = document.forms.main_form.in_z2.value;
+      var v0 = new Vec3( x0, y0, z0 );
+      var v1 = new Vec3( x1, y1, z1 );
+      var v2 = new Vec3( x2, y2, z2 );
+      
+      var a = two_distance( v0, v1 );
+      var b = two_distance( v1, v2 );
+      var c = two_distance( v2, v0 );
+      var S = AreaOfTriangle( a, b, c);
+      area = document.getElementById("ans");
+      area.innerText = S;
+      }
+
+    </script>
+  </body>
+</html>
