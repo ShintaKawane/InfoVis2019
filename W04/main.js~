@@ -1,0 +1,44 @@
+function main()
+{
+    var width = 500;
+    var height = 500;
+
+    var scene = new THREE.Scene();
+
+    //const ambLight = new THREE.AmbientLight(0xffffff, 1.0);
+    const light = new THREE.PointLight(0xffffff, 3, 20, 1.0);
+    //scene.add(ambLight);
+    light.castShadow = true;
+    scene.add(light);
+
+    var fov = 45;
+    var aspect = width / height;
+    var near = 1;
+    var far = 1000;
+    var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+    camera.position.set( 0, 0, 5 );
+    scene.add( camera );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( width, height );
+    renderer.shadowMap.enable = true;
+    document.body.appendChild( renderer.domElement );
+
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    geometry.receiveShadow = true;
+    geometry.castShadow = true;
+    //var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+    var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+    var cube = new THREE.Mesh( geometry, material );
+    scene.add( cube );
+
+    loop();
+
+    function loop()
+    {
+        requestAnimationFrame( loop );
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        renderer.render( scene, camera );
+    }
+}
