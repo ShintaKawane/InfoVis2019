@@ -5,17 +5,12 @@ function main()
 
     var scene = new THREE.Scene();
 
-    var light = new THREE.PointLight(0xffffff);
-    light.position.set(1,1,1);
+    var ambientLight = new THREE.AmbientLight(0x303030);
+    scene.add(ambientLight);
+
+    var light = new THREE.PointLight(0xffffff,1.2);
+    light.position.set(2,2,2);
     scene.add(light);
-
-    var light2 = new THREE.PointLight(0xffffff,0.3);
-    light2.position.set(-1,-1,-1);
-    scene.add(light2);
-
-    //var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    //directionalLight.position.set(THREE.Object3D.DefaultDown);
-    //scene.add(directionalLight);
 
     var fov = 45;
     var aspect = width / height;
@@ -53,15 +48,15 @@ function main()
     var f0 = new THREE.Face3(0, 1, 2);//RED
     var f1 = new THREE.Face3(0, 2, 3);
     var f2 = new THREE.Face3(6, 3, 2);//BLUE
-    var f3 = new THREE.Face3(6, 7, 3);
-    var f4 = new THREE.Face3(6, 2, 5);//GREEN
+    var f3 = new THREE.Face3(3, 6, 7);
+    var f4 = new THREE.Face3(2, 5, 6);//GREEN
     var f5 = new THREE.Face3(5, 2, 1);
-    var f6 = new THREE.Face3(0, 2, 3);
-    var f7 = new THREE.Face3(0, 2, 3);
-    var f8 = new THREE.Face3(0, 2, 3);
-    var f9 = new THREE.Face3(0, 2, 3);
-    var f10 = new THREE.Face3(0, 2, 3);
-    var f11 = new THREE.Face3(0, 2, 3);
+    var f6 = new THREE.Face3(7, 5, 4);//YELLOW
+    var f7 = new THREE.Face3(7, 6, 5);
+    var f8 = new THREE.Face3(4, 1, 0);//PINK
+    var f9 = new THREE.Face3(1, 4, 5);
+    var f10 = new THREE.Face3(0, 3, 7);//SKYBLUE
+    var f11 = new THREE.Face3(7, 4, 0);
     
     var geometry = new THREE.Geometry();
 
@@ -80,18 +75,31 @@ function main()
     geometry.faces.push(f3);
     geometry.faces.push(f4);
     geometry.faces.push(f5);
+    geometry.faces.push(f6);
+    geometry.faces.push(f7);
+    geometry.faces.push(f8);
+    geometry.faces.push(f9);
+    geometry.faces.push(f10);
+    geometry.faces.push(f11);
+    
+    //var material = new THREE.MeshBasicMaterial();
+    var material = new THREE.MeshLambertMaterial();
 
-    var material = new THREE.MeshBasicMaterial();
-    //var material = new THREE.MeshLambertMaterial();
-    //var material = new THREE.MeshNormalMaterial();
-    //var material = new THREE.MeshLambertMaterial({color: 0x80ffff});
     material.vertexColors = THREE.FaceColors;
-    geometry.faces[0].color = new THREE.Color(0xff0000);
-    geometry.faces[1].color = new THREE.Color(0xff4040);
-    geometry.faces[2].color = new THREE.Color(0x0000ff);
-    geometry.faces[3].color = new THREE.Color(0x4040ff);
+    geometry.faces[0].color = new THREE.Color(0xff4040);
+    geometry.faces[1].color = new THREE.Color(0xff0000);
+    geometry.faces[2].color = new THREE.Color(0x4040ff);
+    geometry.faces[3].color = new THREE.Color(0x0000ff);
     geometry.faces[4].color = new THREE.Color(0x00ff00);
     geometry.faces[5].color = new THREE.Color(0x80ff80);
+    geometry.faces[6].color = new THREE.Color(0xffff00);
+    geometry.faces[7].color = new THREE.Color(0xffff80);
+    geometry.faces[8].color = new THREE.Color(0xff40ff);
+    geometry.faces[9].color = new THREE.Color(0xff00ff);
+    geometry.faces[10].color = new THREE.Color(0x80ffff);
+    geometry.faces[11].color = new THREE.Color(0x00ffff);
+
+    geometry.computeFaceNormals();
 
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
@@ -102,8 +110,8 @@ function main()
     function loop()
     {
         requestAnimationFrame( loop );
-        cube.rotation.x += 0.025;
-        cube.rotation.y += 0.015;
+        cube.rotation.x += 0.020;
+        cube.rotation.y += 0.012;
         renderer.render( scene, camera );
     }
 }
