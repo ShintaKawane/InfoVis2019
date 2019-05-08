@@ -5,7 +5,7 @@ function main()
 
     var scene = new THREE.Scene();
 
-    var ambientLight = new THREE.AmbientLight(0x303030);
+    var ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
     var light = new THREE.PointLight(0xffffff,1.2);
@@ -83,8 +83,9 @@ function main()
     geometry.faces.push(f11);
     
     //var material = new THREE.MeshBasicMaterial();
-    var material = new THREE.MeshLambertMaterial();
-
+    //var material = new THREE.MeshLambertMaterial();
+    var material = new THREE.MeshPhysicalMaterial();
+    
     material.vertexColors = THREE.FaceColors;
     geometry.faces[0].color = new THREE.Color(0xff4040);
     geometry.faces[1].color = new THREE.Color(0xff0000);
@@ -104,6 +105,45 @@ function main()
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
 
+    document.addEventListener('mousedown', mouse_down_event);
+    function mouse_down_event(event)
+    {
+	//Clicked point in window coordinates
+	var x_win = event.clientX;
+	var y_win = event.clientY;
+
+	//Window coordinates to NDC
+	var vx = renderer.domElement.offsetLeft;
+	var vy = renderer.domElement.offsetTop;
+	var vw = renderer.domElement.width;
+	var vh = renderer.domElement.height;
+
+	var x_NDC = 2*(x_win - vx) / vw - 1;
+	var y_NDC = -(2*(y_win - vy) / vh - 1);
+
+	//NDC to world coordinates
+	var p_NDC = new THREE.Vector3(x_NDC, y_NDC, 1);
+	var p_wld = p_NDC.unproject(camera);
+
+	//Origin and direction of the ray
+	var origin = camera.position;
+	var direction = (new THREE.Vector3(p_wld.x - camera.position.x,
+					  p_wld.y - camera.position.y,
+					   p_wld.z - camera.position.z)).normalize();
+
+	var raycaster = new THREE.Raycaster(origin, direction);
+	var intersects = raycaster.intersectObject(cube);
+	if(intersects.length > 0)
+	{
+	    //console.log("in the box");
+	    intersects[0].face.color.setRGB(1.0, 1.0, 1.0);
+	    intersects[0].object.geometry.colorsNeedUpdate = true;
+	}
+	
+	//console.log("Clicked point", x_win, ",", y_win);
+	//console.log("NDC", x_NDC, ",", y_NDC);
+	//console.log("world coordinate", p_wld);
+    }
 
     loop();
 
