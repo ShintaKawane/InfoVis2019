@@ -31,7 +31,7 @@ function main()
     var material = new THREE.ShaderMaterial({
         vertexColors: THREE.VertexColors,
         vertexShader: document.getElementById('shader.vert').text,
-        fragmentShader: document.getElementById('shader.frag.Phong').text,
+        fragmentShader: document.getElementById('shader.frag.Blinn-Phong').text,
         uniforms: {
             light_position: {type: 'v3', value: light.position},
             camera_position: {type: 'v3', value: camera.position}
