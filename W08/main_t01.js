@@ -41,20 +41,20 @@ function main()
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
     {
-	//console.log(Math.max.apply(null, scalars));
-	//console.log(Math.min.apply(null, scalars));        
-	var S = i / 255.0; // [0,1]
+        var S = i / 255.0; // [0,1]
         var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
         var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
         var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
         var color = new THREE.Color( R, G, B );
-	S = (Math.max.apply(null, scalars) - Math.min.apply(null, scalars))
-	    * i / 255.0; // [min,max]
         cmap.push( [ S, '0x' + color.getHexString() ] );
     }
 
     // Draw color map
     var lut = new THREE.Lut( 'rainbow', cmap.length );
+    //
+    lut.setMin(Math.min.apply(null, scalars));
+    lut.setMax(Math.max.apply(null, scalars));
+    //
     lut.addColorMap( 'mycolormap', cmap );
     lut.changeColorMap( 'mycolormap' );
     scene.add( lut.setLegendOn( {
@@ -76,9 +76,8 @@ function main()
     var nfaces = faces.length;
     for ( var i = 0; i < nfaces; i++ )
     {
-        //var id = faces[i];
-        //var face = new THREE.Face3( id[0], id[1], id[2] );
-	var face = new THREE.Face3(0, 1, 2);
+        var id = faces[i];
+        var face = new THREE.Face3( id[0], id[1], id[2] );
         geometry.faces.push( face );
     }
 
@@ -86,20 +85,13 @@ function main()
     material.vertexColors = THREE.VertexColors;
     for ( var i = 0; i < nfaces; i++ )
     {
-        /*var id = faces[i];
+        var id = faces[i];
         var S0 = scalars[ id[0] ];
         var S1 = scalars[ id[1] ];
         var S2 = scalars[ id[2] ];
-	var id = faces[i];*/
-        var S0 = scalars[0];
-        var S1 = scalars[1];
-        var S2 = scalars[2];
-        //var C0 = new THREE.Color().setHex( cmap[ S0 ][1] );
-        //var C1 = new THREE.Color().setHex( cmap[ S1 ][1] );
-        //var C2 = new THREE.Color().setHex( cmap[ S2 ][1] );
-	var C0 = new THREE.Color().setHex( cmap[ S0 ] );
-        var C1 = new THREE.Color().setHex( cmap[ S1 ] );
-        var C2 = new THREE.Color().setHex( cmap[ S2 ] );
+	var C0 = lut.getColor( S0 );
+	var C1 = lut.getColor( S1 );
+	var C2 = lut.getColor( S2 );
         geometry.faces[i].vertexColors.push( C0 );
         geometry.faces[i].vertexColors.push( C1 );
         geometry.faces[i].vertexColors.push( C2 );
