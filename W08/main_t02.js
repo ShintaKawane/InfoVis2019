@@ -42,9 +42,6 @@ function main()
     for ( var i = 0; i < 256; i++ )
     {
         var S = i / 255.0; // [0,1]
-        /*var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
-        var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
-        var B = Math.max( Math.cos( S * Math.PI ), 0.0 );*/
 	var R = 1.0;
         var G = Math.max( Math.cos((S/2) * Math.PI), 0.0);
         var B = Math.max( Math.cos((S/2) * Math.PI), 0.0);
@@ -55,15 +52,20 @@ function main()
     // Draw color map
     var lut = new THREE.Lut( 'rainbow', cmap.length );
     lut.addColorMap( 'mycolormap', cmap );
-    lut.changeColorMap( 'mycolormap' );
+    lut = lut.changeColorMap( 'mycolormap' );
     scene.add( lut.setLegendOn( {
         'layout':'horizontal',
         'position': { 'x': 0.6, 'y': -1.1, 'z': 2 },
         'dimensions': { 'width': 0.15, 'height': 1.2 }
     } ) );
-    lut.changeColorMap( 'mycolormap' ).setMin(Math.min.apply(null, scalars));
-    lut.changeColorMap( 'mycolormap' ).setMax(Math.max.apply(null, scalars));
+    lut.setMin(Math.min.apply(null, scalars));
+    lut.setMax(Math.max.apply(null, scalars));
 
+    console.log(Math.min.apply(null, scalars));
+    console.log(Math.max.apply(null, scalars));
+    var sMin = Math.min.apply(null, scalars);
+    var sMax = Math.max.apply(null, scalars);
+    var n = 256;
 
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshBasicMaterial();
@@ -91,9 +93,15 @@ function main()
         var S0 = scalars[ id[0] ];
         var S1 = scalars[ id[1] ];
         var S2 = scalars[ id[2] ];
-	var C0 = lut.changeColorMap( 'mycolormap' ).getColor( S0 );
-	var C1 = lut.changeColorMap( 'mycolormap' ).getColor( S1 );
-	var C2 = lut.changeColorMap( 'mycolormap' ).getColor( S2 );
+	var C0 = lut.getColor( S0 );
+	var C1 = lut.getColor( S1 );
+	var C2 = lut.getColor( S2 );
+	//var C0 = lut.changeColorMap( 'mycolormap' ).getColor( S0 );
+	//var C1 = lut.changeColorMap( 'mycolormap' ).getColor( S1 );
+	//var C2 = lut.changeColorMap( 'mycolormap' ).getColor( S2 );
+	//var C0 = new THREE.Color().setHex( cmap[ getColorMapIndex(S0, sMin, sMax, n) ][1] );
+        //var C1 = new THREE.Color().setHex( cmap[ getColorMapIndex(S1, sMin, sMax, n) ][1] );
+        //var C2 = new THREE.Color().setHex( cmap[ getColorMapIndex(S2, sMin, sMax, n) ][1] );
         geometry.faces[i].vertexColors.push( C0 );
         geometry.faces[i].vertexColors.push( C1 );
         geometry.faces[i].vertexColors.push( C2 );
@@ -109,4 +117,18 @@ function main()
         requestAnimationFrame( loop );
         renderer.render( scene, camera );
     }
+
+    function getColorMapIndex(alpha, minV, maxV, n)
+    {
+	if ( alpha <= minV ) {
+	    alpha = minV;
+	} else if ( alpha >= maxV ) {
+	    alpha = maxV;
+	}
+	alpha = ( alpha - minV ) / ( maxV - minV );
+	var colorPosition = Math.round ( alpha * n );
+	colorPosition == n ? colorPosition -= 1 : colorPosition;
+	return colorPosition;
+    }
+    
 }
