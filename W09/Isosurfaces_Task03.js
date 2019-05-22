@@ -1,12 +1,25 @@
-function Isosurfaces( volume, isovalue )
+function Isosurfaces( volume, isovalue, s_camera, s_light )
 {
     var geometry = new THREE.Geometry();
-    var material = new THREE.MeshLambertMaterial();
+    //var material = new THREE.MeshLambertMaterial();
 
     var smin = volume.min_value;
     var smax = volume.max_value;
     isovalue = KVS.Clamp( isovalue, smin, smax );
 
+    // Create color map
+    var cmap = [];
+    for ( var i = 0; i < 256; i++ )
+    {
+        var S = i / 255.0; // [0,1]
+	var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
+        var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+        var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
+        var color = new THREE.Color( R, G, B );
+        //cmap.push( [ S, '0x' + color.getHexString() ] );
+	cmap.push(color);
+    }
+    
     var lut = new KVS.MarchingCubesTable();
     var cell_index = 0;
     var counter = 0;
@@ -62,8 +75,21 @@ function Isosurfaces( volume, isovalue )
 
     geometry.computeVertexNormals();
 
-    material.color = new THREE.Color( "red" );
-
+    var faceColor = cmap[isovalue];
+    for(var i = 0; i < geometry.faces.length; i++){
+	geometry.faces[i].color = faceColor;
+    }
+    
+    var material = new THREE.ShaderMaterial({
+        vertexColors: THREE.VertexColors,
+        vertexShader: document.getElementById('shader.vert').text,
+        fragmentShader: document.getElementById('shader.frag').text,
+	uniforms: {
+	    light_position: {type: 'v3', value: s_light.position},
+	    camera_position: {type: 'v3', value: s_camera.position}
+	}
+    });
+    
     return new THREE.Mesh( geometry, material );
 
 
@@ -110,6 +136,19 @@ function Isosurfaces( volume, isovalue )
 
     function interpolated_vertex( v0, v1, s )
     {
-        return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
+	var lines = volume.resolution.x;
+        var slices = volume.resolution.x * volume.resolution.y;
+	var vx = interpolate_two_point(v0.x, v1.x, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	var vy = interpolate_two_point(v0.y, v1.y, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	var vz = interpolate_two_point(v0.z, v1.z, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	return new THREE.Vector3(vx, vy, vz);
+	
+        //return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
     }
+
+    function interpolate_two_point(a, b, v0, v1, x)
+    {
+	return a + (b-a) * (x-v0) / (v1-v0);
+    }
+    
 }

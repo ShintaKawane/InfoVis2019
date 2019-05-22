@@ -144,15 +144,7 @@ function Isosurfaces( volume, isovalue )
 
     function interpolate_two_point(a, b, v0, v1, x)
     {
-	//return (a * Math.abs(v0-x) / Math.abs(v0-v1)) + (b * Math.abs(v1-x) / Math.abs(v0-v1));
-	if(a <= b)
-	{
-	    return a + (b-a) * Math.abs(x-v0) / Math.abs(v1-v0);
-	}
-	else
-	{
-	    return b + (a-b) * Math.abs(x-v0) / Math.abs(v1-v0);
-	}
+	return a + (b-a) * (x-v0) / (v1-v0);
     }
     
 }

@@ -12,9 +12,10 @@ function main()
     var bounds = Bounds( volume );
     screen.scene.add( bounds );
 
-    var isovalue = 128;
-    var surfaces = Isosurfaces( volume, isovalue );
+    var isovalue = 10;
+    var surfaces = Isosurfaces( volume, isovalue, screen.camera, screen.light);
     screen.scene.add( surfaces );
+
 
     document.addEventListener( 'mousemove', function() {
         screen.light.position.copy( screen.camera.position );
