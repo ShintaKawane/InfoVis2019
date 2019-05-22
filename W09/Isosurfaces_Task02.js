@@ -58,6 +58,14 @@ function Isosurfaces( volume, isovalue )
                     var v23 = interpolated_vertex( v2, v3, isovalue );
                     var v45 = interpolated_vertex( v4, v5, isovalue );
 
+		    /*
+		     */
+		    
+
+
+		    /*
+		     */
+
                     geometry.vertices.push( v01 );
                     geometry.vertices.push( v23 );
                     geometry.vertices.push( v45 );
@@ -124,15 +132,27 @@ function Isosurfaces( volume, isovalue )
 
     function interpolated_vertex( v0, v1, s )
     {
-        return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
+	var lines = volume.resolution.x;
+        var slices = volume.resolution.x * volume.resolution.y;
+	var vx = interpolate_two_point(v0.x, v1.x, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	var vy = interpolate_two_point(v0.y, v1.y, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	var vz = interpolate_two_point(v0.z, v1.z, volume.values[v0.x + v0.y*lines + v0.z*slices], volume.values[v1.x + v1.y*lines + v1.z*slices], s);
+	return new THREE.Vector3(vx, vy, vz);
+	
+        //return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
     }
 
-    function interpolate_two_point(a, b)
+    function interpolate_two_point(a, b, v0, v1, x)
     {
-	if(a == b)
-	    return a;
-
+	//return (a * Math.abs(v0-x) / Math.abs(v0-v1)) + (b * Math.abs(v1-x) / Math.abs(v0-v1));
+	if(a <= b)
+	{
+	    return a + (b-a) * Math.abs(x-v0) / Math.abs(v1-v0);
+	}
+	else
+	{
+	    return b + (a-b) * Math.abs(x-v0) / Math.abs(v1-v0);
+	}
     }
-
     
 }
