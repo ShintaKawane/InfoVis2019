@@ -13,12 +13,11 @@ function SlicePlane( volume, p )
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
     {
-        var S = i / 255.0; // [0,1]
+        var S = i / 255.0;
 	var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
         var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
         var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
         var color = new THREE.Color( R, G, B );
-        //cmap.push( [ S, '0x' + color.getHexString() ] );
 	cmap.push(color);
     }
     
@@ -38,8 +37,6 @@ function SlicePlane( volume, p )
         {
             for ( var x = 0; x < volume.resolution.x - 1; x++ )
             {
-		//var isovalue = x * p[0] + y * p[1] + z * p[2] + p[3];
-		//var isovalue = 60;
                 var indices = cell_node_indices( cell_index++ );
                 //var index = table_index( indices );
 		var index = table_index( indices, x, y, z );
@@ -66,30 +63,21 @@ function SlicePlane( volume, p )
                     var v4 = new THREE.Vector3( x + vid4[0], y + vid4[1], z + vid4[2] );
                     var v5 = new THREE.Vector3( x + vid5[0], y + vid5[1], z + vid5[2] );
 
-                    /*var v01 = interpolated_vertex( v0, v1, isovalue );
-                    var v23 = interpolated_vertex( v2, v3, isovalue );
-                    var v45 = interpolated_vertex( v4, v5, isovalue );*/
-
-		    var C0 = interpolate_color(v0, v1);
-		    var C1 = interpolate_color(v2, v3);
-		    var C2 = interpolate_color(v4, v5);
-
 		    var v01 = interpolated_vertex( v0, v1, 0 );
                     var v23 = interpolated_vertex( v2, v3, 0 );
                     var v45 = interpolated_vertex( v4, v5, 0 );
 
-		    //geometry.colors.push(cmap[volume.values[v01.x + v01.y*lines + v01.z*slices]]);
-		    //geometry.colors.push(cmap[volume.values[v23.x + v23.y*lines + v23.z*slices]]);
-		    //geometry.colors.push(cmap[volume.values[v45.x + v45.y*lines + v45.z*slices]]);
-
-		    //geometry.colors.push(cmap[0]);
-		    //geometry.colors.push(cmap[200]);
-		    //geometry.colors.push(cmap[100]);
-
-		    //geometry.colors.push( new THREE.Color( 'skyblue' ) );
-		    //geometry.colors.push( new THREE.Color( 'skyblue' ) );
-		    //geometry.colors.push( new THREE.Color( 'skyblue' ) );
+		    var C0 = volume.values[v0.x + v0.y*lines + v0.z*slices];
+		    var C1 = volume.values[v1.x + v1.y*lines + v1.z*slices];
+		    var C2 = volume.values[v2.x + v2.y*lines + v2.z*slices];
+		    var C3 = volume.values[v3.x + v3.y*lines + v3.z*slices];
+		    var C4 = volume.values[v4.x + v4.y*lines + v4.z*slices];
+		    var C5 = volume.values[v5.x + v5.y*lines + v5.z*slices];
 		    
+		    var C01 = interpolate_color(C0, C1);
+		    var C23 = interpolate_color(C2, C3);
+		    var C45 = interpolate_color(C4, C5);
+
                     geometry.vertices.push( v01 );
                     geometry.vertices.push( v23 );
                     geometry.vertices.push( v45 );
@@ -99,16 +87,9 @@ function SlicePlane( volume, p )
                     var id2 = counter++;
                     geometry.faces.push( new THREE.Face3( id0, id1, id2 ) );
 		    
-		    //var C0 = cmap[volume.values[v01.x + v01.y*lines + v01.z*slices]];
-		    //var C1 = cmap[volume.values[v23.x + v23.y*lines + v23.z*slices]];
-		    //var C2 = cmap[volume.values[v45.x + v45.y*lines + v45.z*slices]];
-	
-		    //var C0 = cmap[ 200 ];
-		    //var C1 = cmap[ 200 ];
-		    //var C2 = cmap[ 200 ];
-		    geometry.faces[face_n].vertexColors.push( C0 );
-		    geometry.faces[face_n].vertexColors.push( C1 );
-		    geometry.faces[face_n].vertexColors.push( C2 );
+		    geometry.faces[face_n].vertexColors.push( C01 );
+		    geometry.faces[face_n].vertexColors.push( C23 );
+		    geometry.faces[face_n].vertexColors.push( C45 );
 		    face_n++;
                 }
             }
@@ -118,11 +99,6 @@ function SlicePlane( volume, p )
     }
 
     geometry.computeVertexNormals();
-
-    /*var faceColor = new THREE.Color(0x00ffff);
-    for(var i = 0; i < geometry.vertices.length; i++){
-        geometry.colors[i] = faceColor;
-    }*/
     
     geometry.colorsNeedUpdate = true;
     //material.color = new THREE.Color( "red" );
@@ -134,39 +110,15 @@ function SlicePlane( volume, p )
     //material.vertexColors = THREE.VertexColors;
 
     
-    // Assign colors for each vertex
-    //material.vertexColors = THREE.VertexColors;
-    //for ( var i = 0; i < geometry.faces.length; i++ )
-    //{
-        /*var id = faces[i];
-        var S0 = scalars[ id[0] ];
-        var S1 = scalars[ id[1] ];
-        var S2 = scalars[ id[2] ];
-        var S0 = Math.round(a*S0+b);
-        var S1 = Math.round(a*S1+b);
-        var S2 = Math.round(a*S2+b);
-        console.log(S0,S1,S2);*/
-	//cmap[volume.values[v01.x + v01.y*lines + v01.z*slices]]
-	
-        //var C0 = cmap[ 200 ];
-        //var C1 = cmap[ 200 ];
-        //var C2 = cmap[ 200 ];
-        //geometry.faces[i].vertexColors.push( C0 );
-        //geometry.faces[i].vertexColors.push( C1 );
-        //geometry.faces[i].vertexColors.push( C2 );
-    //}
-    
     return new THREE.Mesh( geometry, material );
 
-    function interpolate_color(v0, v1)
+    //function interpolate_color(v0, v1)
+    function interpolate_color(val0, val1)
     {
-	var s0 = volume.values[v0.x + v0.y*lines + v0.z*slices];
-	var s1 = volume.values[v1.x + v1.y*lines + v1.z*slices];
+	//var s0 = volume.values[v0.x + v0.y*lines + v0.z*slices];
+	//var s1 = volume.values[v1.x + v1.y*lines + v1.z*slices];
 
-	var ai0 = Math.round();
-
-	//function getColorMapIndex(alpha, minV, maxV, n)
-	if ( s0 <= smin ) {
+	/*if ( s0 <= smin ) {
 	    s0 = smin;
 	} else if ( s0 >= smax ) {
 	    s0 = smax;
@@ -183,11 +135,19 @@ function SlicePlane( volume, p )
 	s1 = ( s1 - smin ) / ( smax - smin );
 	var cp1 = Math.round ( s1 * 256 );
 	cp1 == 256 ? cp1 -= 1 : cp1;
-
-
 	
 	var c0 = cmap[cp0];
-	var c1 = cmap[cp1];
+	var c1 = cmap[cp1];*/
+
+	var c0 = cmap[val0];
+	var c1 = cmap[val1];
+
+	var ratio = val0 / (val1 - val0);
+	var R_p = c0.r + ratio * (c1.r - c0.r);
+	var G_p = c0.g + ratio * (c1.g - c0.g);
+	var B_p = c0.b + ratio * (c1.b - c0.b);
+	
+	return new THREE.Color(R_p, G_p, B_p);
 
 	/*var ratio = Math.abs(v0 / (v1 - v0));
 	var R_p = c0.r + ratio * (c1.r - c0.r);
@@ -195,7 +155,7 @@ function SlicePlane( volume, p )
 	var B_p = c0.b + ratio * (c1.b - c0.b);
 	
 	return new THREE.Color(R_p, G_p, B_p);*/
-	return c1;
+	//return c1;
     }
 
     function cell_node_indices( cell_index )

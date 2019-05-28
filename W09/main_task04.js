@@ -12,7 +12,7 @@ function main()
     var bounds = Bounds( volume );
     screen.scene.add( bounds );
 
-    var p = [3300, 0, -12100, 0];
+    var p = [11.0, 0.0, -40.3, 0.0];
     var plane = SlicePlane( volume, p);
     screen.scene.add( plane );
 
