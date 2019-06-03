@@ -12,16 +12,11 @@ function Isosurfaces( volume, isovalue, scene )
 	return Math.max(b, Math.min(d,a));
     }
 
-    // Create color map
-    var cmapl = [];
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
     {
-        var S = i / 255.0; // [0,1]
-
-	//var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
-        //var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
-	//var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
+        var S = i / 255.0;
+	
 	if(i<128){
 	    var R = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
             var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
@@ -32,22 +27,8 @@ function Isosurfaces( volume, isovalue, scene )
             var B = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
 	}
         var color = new THREE.Color( R, G, B );
-        cmapl.push( [ S, '0x' + color.getHexString() ] );
 	cmap.push(color);
     }
-
-    // Draw color map
-    var legend = new THREE.Lut( 'rainbow', cmapl.length );
-    legend.addColorMap( 'mycolormap', cmapl );
-    legend = legend.changeColorMap( 'mycolormap' );
-    scene.add( legend.setLegendOn( {
-        'layout':'horizontal',
-        //'position': { 'x': 0.6, 'y': -1.1, 'z': 2 },
-        'dimensions': { 'width': 0.15, 'height': 1.2 }
-    } ) );
-    legend.setMin(volume.min);
-    legend.setMax(volume.max);
-
     
     var lut = new MarchingCubesTable();
     var cell_index = 0;
@@ -103,10 +84,7 @@ function Isosurfaces( volume, isovalue, scene )
     }
 
     geometry.computeVertexNormals();
-
-    //material.color = new THREE.Color( "red" );
     material.color = cmap[isovalue];
-
     return new THREE.Mesh( geometry, material );
 
 
@@ -159,8 +137,6 @@ function Isosurfaces( volume, isovalue, scene )
 	var vy = interpolate_two_point(v0.y, v1.y, volume.value[v0.x + v0.y*lines + v0.z*slices], volume.value[v1.x + v1.y*lines + v1.z*slices], s);
 	var vz = interpolate_two_point(v0.z, v1.z, volume.value[v0.x + v0.y*lines + v0.z*slices], volume.value[v1.x + v1.y*lines + v1.z*slices], s);
 	return new THREE.Vector3(vx, vy, vz);
-	
-        //return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
     }
 
     function interpolate_two_point(a, b, v0, v1, x)

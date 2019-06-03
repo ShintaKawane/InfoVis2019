@@ -19,9 +19,9 @@ function Bounds( v_min, v_max )
 
     var group = new THREE.Group();
     group.add(new Basics());
-    group.add(new XAxis());
-    group.add(new YAxis());
-    group.add(new ZAxis());
+    group.add(new Axis(v0, v1, "red"));//X axis
+    group.add(new Axis(v0, v4, "green"));//Y axis
+    group.add(new Axis(v3, v0, "blue"));//Z axis
     return group;
     
     function Basics()
@@ -44,34 +44,14 @@ function Bounds( v_min, v_max )
 	material.color = new THREE.Color( "black" );
 	return new THREE.Line( geometry, material, THREE.LinePieces );
     }
-    
-    function XAxis()
+
+    function Axis(a,b,c)
     {
 	var geometry = new THREE.Geometry();
 	var material = new THREE.LineBasicMaterial();
-	geometry.vertices.push( v0 ); geometry.vertices.push( v1 );
+	geometry.vertices.push( a ); geometry.vertices.push( b );
 	material.linewidth = 2;
-	material.color = new THREE.Color( "red" );
-	return new THREE.Line( geometry, material, THREE.LinePieces );
-    }
-    
-    function YAxis()
-    {
-	var geometry = new THREE.Geometry();
-	var material = new THREE.LineBasicMaterial();
-	geometry.vertices.push( v0 ); geometry.vertices.push( v4 );
-	material.linewidth = 2;
-	material.color = new THREE.Color( "green" );
-	return new THREE.Line( geometry, material, THREE.LinePieces );
-    }
-    
-    function ZAxis()
-    {
-	var geometry = new THREE.Geometry();
-	var material = new THREE.LineBasicMaterial();
-	geometry.vertices.push( v3 ); geometry.vertices.push( v0 );
-	material.linewidth = 2;
-	material.color = new THREE.Color( "blue" );
+	material.color = new THREE.Color( c );
 	return new THREE.Line( geometry, material, THREE.LinePieces );
     }
 

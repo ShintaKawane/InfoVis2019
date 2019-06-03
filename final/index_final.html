@@ -6,17 +6,32 @@
     <script src="three.min.js"></script>
     <script src="Bounds.js"></script>
     <script src="Isosurfaces.js"></script>
-    <script src="Lut.js"></script>
     <script src="MarchingCubesTable.js"></script>
+    <script src="SlicePlane.js"></script>
     <script src="TrackballControls.js"></script>
     <script src="TurblenceData.js"></script>
-    <script src="main_final.js"></script>
-    Before
-    <div id="Iso2"></div>
-    After
+    <script src="main_isosurface.js"></script>
+    <script src="main_sliceplane.js"></script>
+    <h1>Final Task</h1>
+    <h2>Abstract</h2>
+    I introduce some visualization method in this page.
+    <h2>0. Data preparation</h2>
+    I use the datasets from <i>Open Scientific Visualization Datasets</i>(<a href="https://klacansky.com/open-scivis-datasets/">https://klacansky.com/open-scivis-datasets/</a>).<br>
+    I chose <i>Isotropic Turbulence</i> Data. That resolusion is 256x256x256 and size of the raw data is 64MB.<br>
+    First, I convert the data to javascript code by using c++ for use data easily.<br>
+    Then data size becomes 116MB.
+    <h2>1. Isosurface</h2>
     <div id="Iso"></div>
+    <!--<input type="range" id="isovalue" min="0" max="255" value="5">
     <script>
-      main();
+      var elem = document.getElementById("isovalue");
+      elem.addEventListerner('input',main().isovalue = elem.value);
+    </script>-->
+    <h2>2. SlicePlane</h2>
+    <div id="Slice"></div>
+    <script>
+      main_isosurface();
+      main_sliceplane();
     </script>
   </body>
 </html>
