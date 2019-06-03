@@ -1,4 +1,4 @@
-function Isosurfaces( volume, isovalue )
+function Isosurfaces( volume, isovalue, scene )
 {
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshLambertMaterial();
@@ -13,17 +13,41 @@ function Isosurfaces( volume, isovalue )
     }
 
     // Create color map
+    var cmapl = [];
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
     {
         var S = i / 255.0; // [0,1]
-	var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
-        var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
-        var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
+
+	//var R = Math.max( Math.cos( ( S - 1.0 ) * Math.PI ), 0.0 );
+        //var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+	//var B = Math.max( Math.cos( S * Math.PI ), 0.0 );
+	if(i<128){
+	    var R = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+            var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+            var B = 1.0;
+	}else{
+	    var R = 1.0;
+            var G = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+            var B = Math.max( Math.cos( ( S - 0.5 ) * Math.PI ), 0.0 );
+	}
         var color = new THREE.Color( R, G, B );
-        //cmap.push( [ S, '0x' + color.getHexString() ] );
+        cmapl.push( [ S, '0x' + color.getHexString() ] );
 	cmap.push(color);
     }
+
+    // Draw color map
+    var legend = new THREE.Lut( 'rainbow', cmapl.length );
+    legend.addColorMap( 'mycolormap', cmapl );
+    legend = legend.changeColorMap( 'mycolormap' );
+    scene.add( legend.setLegendOn( {
+        'layout':'horizontal',
+        //'position': { 'x': 0.6, 'y': -1.1, 'z': 2 },
+        'dimensions': { 'width': 0.15, 'height': 1.2 }
+    } ) );
+    legend.setMin(volume.min);
+    legend.setMax(volume.max);
+
     
     var lut = new MarchingCubesTable();
     var cell_index = 0;

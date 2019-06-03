@@ -3,6 +3,8 @@ function main()
     var volume = new TurblenceData();
     var width = 500;
     var height = 500;
+
+    var iso = document.getElementById("Iso");
     
     console.log("Hello");
     var scene = new THREE.Scene();
@@ -16,7 +18,8 @@ function main()
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
     renderer.setClearColor(0xa0a0a0,1);
-    document.body.appendChild(renderer.domElement);
+    iso.appendChild(renderer.domElement);
+    //document.body.appendChild(renderer.domElement);
 
     var fov = 45;
     var aspect = width / height;
@@ -41,8 +44,8 @@ function main()
     new THREE.Vector3(volume.dimx/2,volume.dimy/2,volume.dimz/2));
     scene.add(bounds);
     
-    var isovalue = 10;
-    var surfaces = Isosurfaces(volume, isovalue);
+    var isovalue = 20;
+    var surfaces = Isosurfaces(volume, isovalue, scene);
     surfaces.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
     scene.add(surfaces);
     
