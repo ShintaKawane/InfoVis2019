@@ -78,10 +78,10 @@ function SlicePlane( volume, p )
 		    var C3 = volume.value[v3.x + v3.y*lines + v3.z*slices];
 		    var C4 = volume.value[v4.x + v4.y*lines + v4.z*slices];
 		    var C5 = volume.value[v5.x + v5.y*lines + v5.z*slices];
-		    
-		    var C01 = interpolate_color(C0, C1);
-		    var C23 = interpolate_color(C2, C3);
-		    var C45 = interpolate_color(C4, C5);
+		    		    
+		    var C01 = interpolate_color(getColorMapIndex(C0), getColorMapIndex(C1));
+		    var C23 = interpolate_color(getColorMapIndex(C2), getColorMapIndex(C3));
+		    var C45 = interpolate_color(getColorMapIndex(C4), getColorMapIndex(C5));
 
                     geometry.vertices.push( v01 );
                     geometry.vertices.push( v23 );
@@ -163,19 +163,32 @@ function SlicePlane( volume, p )
     
     function interpolate_color(val0, val1)
     {
-	/*var c0 = cmap[val0];
+	var c0 = cmap[val0];
 	var c1 = cmap[val1];
 
 	var R_p = (c0.r + c1.r) / 2;
 	var G_p = (c0.g + c1.g) / 2;
-	var B_p = (c0.b + c1.b) / 2;*/
+	var B_p = (c0.b + c1.b) / 2;
 
 	/*var ratio = Math.abs(val0 / (val1 - val0));
 	var R_p = c0.r * (1.0 - ratio) + c1.r * ratio;
 	var G_p = c0.g * (1.0 - ratio) + c1.g * ratio;
 	var B_p = c0.b * (1.0 - ratio) + c1.b * ratio;*/
-	return new THREE.Vector3().addVectors( val0, val1 ).divideScalar( 2 );
-	//return new THREE.Color(R_p, G_p, B_p);
+	//return new THREE.Vector3().addVectors( val0, val1 ).divideScalar( 2 );
+	return new THREE.Color(R_p, G_p, B_p);
+    }
+    
+    function getColorMapIndex(alpha)
+    {
+	if ( alpha <= smin ) {
+	    alpha = smin;
+	} else if ( alpha >= smax ) {
+	    alpha = smax;
+	}
+	alpha = ( alpha - smin ) / ( smax - smin );
+	var colorPosition = Math.round ( alpha * 256 );
+	colorPosition == 256 ? colorPosition -= 1 : colorPosition;
+	return colorPosition;
     }
 
 }
