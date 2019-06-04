@@ -25,7 +25,7 @@ function main_sliceplane()
     var near = 1;
     var far = 5000;
     var camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
-    camera.position.set(0,0,600);
+    camera.position.set(0,0,300);
     scene.add(camera);
 
     var trackball = new THREE.TrackballControls(camera, renderer.domElement);
