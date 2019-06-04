@@ -6,11 +6,12 @@ function Isosurfaces( volume, isovalue, scene )
     var smin = volume.min;
     var smax = volume.max;
     isovalue = clamp( isovalue, smin, smax );
-
+    
     function clamp(a,b,d)
     {
 	return Math.max(b, Math.min(d,a));
     }
+
 
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
@@ -143,5 +144,6 @@ function Isosurfaces( volume, isovalue, scene )
     {
 	return a + (b-a) * (x-v0) / (v1-v0);
     }
-    
+
 }
+

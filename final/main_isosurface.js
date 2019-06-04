@@ -1,13 +1,14 @@
+var isovalue = 8;
+var surfaces;
+var volume = new TurblenceData();
+var scene = new THREE.Scene();
+
 function main_isosurface()
 {
-    var volume = new TurblenceData();
     var width = 500;
     var height = 500;
 
     var iso = document.getElementById("Iso");
-    
-    console.log("Hello");
-    var scene = new THREE.Scene();
 
     var ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
@@ -45,8 +46,7 @@ function main_isosurface()
     scene.add(bounds);
     
     //var isovalue = document.getElementById("isovalue").value;
-    var isovalue = 8;
-    var surfaces = Isosurfaces(volume, isovalue, scene);
+    surfaces = Isosurfaces(volume, isovalue, scene);
     surfaces.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
     scene.add(surfaces);
     
@@ -59,4 +59,13 @@ function main_isosurface()
 	light.position.copy(camera.position);
 	renderer.render(scene, camera);
     }
+}
+
+function iso_change(v)
+{
+    scene.remove(surfaces);
+    isovalue = v;
+    surfaces = Isosurfaces(volume, isovalue, scene);
+    surfaces.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
+    scene.add(surfaces);
 }
