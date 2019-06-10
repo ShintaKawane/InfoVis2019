@@ -1,7 +1,6 @@
 var isovalue = 8;
 var surfaces;
-var volume = new TurblenceData();
-var scene = new THREE.Scene();
+var scene_iso = new THREE.Scene();
 
 function main_isosurface()
 {
@@ -11,10 +10,10 @@ function main_isosurface()
     var iso = document.getElementById("Iso");
 
     var ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
+    scene_iso.add(ambientLight);
     
     var light = new THREE.PointLight(0xffffff);
-    scene.add(light);
+    scene_iso.add(light);
     
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
@@ -28,7 +27,7 @@ function main_isosurface()
     var far = 5000;
     var camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
     camera.position.set(0,0,300);
-    scene.add(camera);
+    scene_iso.add(camera);
 
     var trackball = new THREE.TrackballControls(camera, renderer.domElement);
     trackball.rotateSpeed = 3.0;
@@ -39,16 +38,16 @@ function main_isosurface()
     material.transparent = true;
     var cube = new THREE.Mesh(geometry, material);
     cube.position.set(1,1,1);
-    scene.add(cube);
+    scene_iso.add(cube);
 
     var bounds = new Bounds(new THREE.Vector3(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2),
     new THREE.Vector3(volume.dimx/2,volume.dimy/2,volume.dimz/2));
-    scene.add(bounds);
+    scene_iso.add(bounds);
     
     //var isovalue = document.getElementById("isovalue").value;
-    surfaces = Isosurfaces(volume, isovalue, scene);
+    surfaces = Isosurfaces(volume, isovalue, scene_iso);
     surfaces.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
-    scene.add(surfaces);
+    scene_iso.add(surfaces);
     
     loop();
 
@@ -57,15 +56,15 @@ function main_isosurface()
 	requestAnimationFrame(loop);
 	trackball.update();
 	light.position.copy(camera.position);
-	renderer.render(scene, camera);
+	renderer.render(scene_iso, camera);
     }
 }
 
 function iso_change(v)
 {
-    scene.remove(surfaces);
+    scene_iso.remove(surfaces);
     isovalue = v;
-    surfaces = Isosurfaces(volume, isovalue, scene);
+    surfaces = Isosurfaces(volume, isovalue, scene_iso);
     surfaces.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
-    scene.add(surfaces);
+    scene_iso.add(surfaces);
 }

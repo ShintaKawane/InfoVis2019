@@ -1,18 +1,18 @@
+var plane;
+var scene_slice = new THREE.Scene();
+
 function main_sliceplane()
 {
-    var volume = new TurblenceData();
     var width = 500;
     var height = 500;
 
     var slice = document.getElementById("Slice");
- 
-    var scene = new THREE.Scene();
 
     var ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
+    scene_slice.add(ambientLight);
     
     var light = new THREE.PointLight(0xffffff);
-    scene.add(light);
+    scene_slice.add(light);
     
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
@@ -26,7 +26,7 @@ function main_sliceplane()
     var far = 5000;
     var camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
     camera.position.set(0,0,300);
-    scene.add(camera);
+    scene_slice.add(camera);
 
     var trackball = new THREE.TrackballControls(camera, renderer.domElement);
     trackball.rotateSpeed = 3.0;
@@ -37,17 +37,17 @@ function main_sliceplane()
     material.transparent = true;
     var cube = new THREE.Mesh(geometry, material);
     cube.position.set(1,1,1);
-    scene.add(cube);
+    scene_slice.add(cube);
 
     var bounds = new Bounds(new THREE.Vector3(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2),
     new THREE.Vector3(volume.dimx/2,volume.dimy/2,volume.dimz/2));
-    scene.add(bounds);
+    scene_slice.add(bounds);
     
     //var isovalue = document.getElementById("isovalue").value;
     var p = [5, 2, -4, 3];
-    var plane = SlicePlane(volume, p);
+    plane = SlicePlane(volume, p);
     plane.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
-    scene.add(plane);
+    scene_slice.add(plane);
     
     loop();
 
@@ -56,6 +56,18 @@ function main_sliceplane()
 	requestAnimationFrame(loop);
 	trackball.update();
 	light.position.copy(camera.position);
-	renderer.render(scene, camera);
+	renderer.render(scene_slice, camera);
     }
+}
+
+function change_slice()
+{
+    scene_slice.remove(plane);
+    plane = SlicePlane(volume,
+		       [document.getElementById("s_a").value,
+			document.getElementById("s_b").value,
+			document.getElementById("s_c").value,
+			document.getElementById("s_d").value]);
+    plane.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
+    scene_slice.add(plane);
 }

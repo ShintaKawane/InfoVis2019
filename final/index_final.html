@@ -29,8 +29,10 @@
     <h2>2. SlicePlane</h2>
     <div id="Slice"></div>
     <input type="number" id="s_a" step="0.01" value="5">x +<input type="number" id="s_b" step="0.01" value="2">y +
-    <input type="number" id="s_c" step="0.01" value="-4">z +<input type="number" id="s_a" step="0.01" value="3"> = 0<br>
+    <input type="number" id="s_c" step="0.01" value="-4">z +<input type="number" id="s_d" step="0.01" value="3"> = 0<br>
+    <input type="button" id="s_bu" value="Rewrite" onclick="change_slice()"><br>
     <script>
+      var volume = new TurblenceData();
       main_isosurface();
       main_sliceplane();
     </script>
