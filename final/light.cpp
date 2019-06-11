@@ -56,27 +56,53 @@ int main(int argc, char** argv){
       std::cout << "write: " << ((float)i / data_number)*100.0 << "%" << std::endl;
     }
     }*/
-  float temp[2][256];
+  float lo[256][256];
+  float hi[256][256];
+  float outd[128][128];
   auto count = 0;
   while(count < data_number){
-    for(int i = 0;i < 2;i++){
+    for(int i = 0;i < 256;i++){
       for(int j = 0;j < 256;j++){
-	temp[i][j] = 0.0;
+	lo[i][j] = 0.0;
+	hi[i][j] = 0.0;
+      }
+    }
+    for(int i = 0;i < 128;i++){
+      for(int j = 0;j < 128;j++){
+	outd[i][j] = 0.0;
       }
     }
 
-    for(int i = 0;i < 2;i++){
+    for(int i = 0;i < 256;i++){
       for(int j = 0;j < 256;j++){
-	ifs.read((char*)&temp[i][j], type_size);
+	ifs.read((char*)&lo[i][j], type_size);
+	count++;
+      }
+    }
+    for(int i = 0;i < 256;i++){
+      for(int j = 0;j < 256;j++){
+	ifs.read((char*)&hi[i][j], type_size);
 	count++;
       }
     }
     for(int i = 0;i < 128;i++){
+      for(int j = 0;j < 128;j++){
+	outd[i][j] = (lo[i*2][j*2] + lo[i*2+1][j*2] + lo[i*2][j*2+1] + lo[i*2+1][j*2+1]
+		    + hi[i*2][j*2] + hi[i*2+1][j*2] + hi[i*2][j*2+1] + hi[i*2+1][j*2+1]) / 8.0;
+      }
+    }
+    for(int i = 0;i < 128;i++){
+      for(int j = 0;j < 128;j++){
+	ofs << outd[i][j] << "," << std::endl;
+      }
+    }
+    /*for(int i = 0;i < 128;i++){
       ofs << (temp[0][i*2]+temp[0][i*2+1]+temp[1][i*2]+temp[1][i*2+1])/4.0 << "," << std::endl;
-    }
-    if(count%10000 == 0){
+      }*/
+    /*if(count%10000 == 0){
       std::cout << "write: " << ((float)count / data_number)*100.0 << "%" << std::endl;
-    }
+      }*/
+    std::cout << "write: " << ((float)count / data_number)*100.0 << "%" << std::endl;
   }
   
   ofs << "];" << std::endl << "}" << std::endl;
