@@ -4,17 +4,18 @@
   </head>
   <body style="margin:0">
     <script src="three.min.js"></script>
-    <script src="KVS.min.js"></script>
     <script src="Bounds.js"></script>
     <script src="Isosurfaces.js"></script>
     <script src="MarchingCubesTable.js"></script>
     <script src="SlicePlane.js"></script>
+    <script src="StreamLines.js"></script>
     <script src="TrackballControls.js"></script>
     <script src="TurblenceData_light.js"></script>
     <script src="VolumeRendering.js"></script>
     <script src="main_isosurface.js"></script>
     <script src="main_sliceplane.js"></script>
     <script src="main_volume.js"></script>
+    <script src="main_streamlines.js"></script>
     <h1>Final Task</h1>
     <h2>Abstract</h2>
     I introduce some visualization method in this page.
@@ -36,11 +37,14 @@
     <input type="button" id="s_bu" value="Rewrite" onclick="change_slice()"><br>
     <h2>3. Volume Rendering</h2>
     <div id="Vol_R"></div>
+    <h2>4. Stream Lines</h2>
+    <div id="Stream"></div>
     <script>
       var volume = new TurblenceData();
       main_isosurface();
       main_sliceplane();
       main_VolumeRendering();
+      main_streamlines();
     </script>
   </body>
 </html>

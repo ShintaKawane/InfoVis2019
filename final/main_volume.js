@@ -47,7 +47,13 @@ function main_VolumeRendering()
     var plane = SlicePlane(volume, p);
     plane.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
     scene_volume.add(plane);
-    
+    //VolumeRender(width, height, camera, renderer, plane);
+    document.addEventListener('mousedown', VolumeRender(width, height, camera, renderer, plane));
+
+    var setss = VolumeRender(width, height, camera, renderer, plane);
+    setss.forEach(function(sss){
+	scene_volume.add(sss);
+    });
     loop();
 
     function loop()
