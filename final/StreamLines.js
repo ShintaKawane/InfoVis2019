@@ -56,11 +56,13 @@ function StreamLines( volume )
 	for(var i = 0; i < 15000; i++)
 	{
 	    var delta = tange(va);
-	    vb = new THREE.Vector3(va.x + delta.x, va.y + delta.y, va.z + delta.z);
+	    var leng = delta.length();
+
+	    var delta_normal = delta.normalize().multiplyScalar(0.333);
+	    vb = new THREE.Vector3(va.x + delta_normal.x, va.y + delta_normal.y, va.z + delta_normal.z);
 	    if(vb.x < ep || vb.y < ep || vb.z < ep
 	       || vb.x > volume.dimx - ep || vb.x > volume.dimx - ep || vb.x > volume.dimx - ep)
 		break;
-	    var leng = (new THREE.Vector3(va.x-vb.x,va.y-vb.y,va.z-vb.z)).length();
 	    geometry.colors.push(cmap[mapIndex(leng)]); geometry.colors.push(cmap[mapIndex(leng)]);
 	    geometry.vertices.push( va ); geometry.vertices.push( vb );
 	    va = new THREE.Vector3(vb.x,vb.y,vb.z);
