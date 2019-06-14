@@ -19,9 +19,9 @@ function StreamLines( volume )
 	p_geometry.vertices.push(seed);
 	}*/
 
-    for(var i = 60; i < 80; i++)
+    for(var i = 50; i < 90; i++)
     {
-	for(var j = 40;j < 80; j++)
+	for(var j = 20;j < 100; j++)
 	{
 	    var seed = new THREE.Vector3(50,j,i);
 	    start_points.push(seed);
@@ -53,7 +53,7 @@ function StreamLines( volume )
 
 	var va = st;
 	var vb = st;
-	for(var i = 0; i < 15000; i++)
+	for(var i = 0; i < 300; i++)
 	{
 	    var delta = tange(va);
 	    var leng = delta.length();

@@ -6,6 +6,7 @@
     <script src="three.min.js"></script>
     <script src="Bounds.js"></script>
     <script src="Isosurfaces.js"></script>
+    <script src="LIC.js"></script>
     <script src="MarchingCubesTable.js"></script>
     <script src="SlicePlane.js"></script>
     <script src="StreamLines.js"></script>
@@ -16,6 +17,7 @@
     <script src="main_sliceplane.js"></script>
     <script src="main_volume.js"></script>
     <script src="main_streamlines.js"></script>
+    <script src="main_LIC.js"></script>
     <h1>Final Task</h1>
     <h2>Abstract</h2>
     I introduce some visualization method in this page.
@@ -39,12 +41,15 @@
     <div id="Vol_R"></div>
     <h2>4. StreamLines</h2>
     <div id="Stream"></div>
+    <h2>5. LineIntegralConvolution</h2>
+    <div id="LIC"></div>
     <script>
       var volume = new TurblenceData();
       main_isosurface();
       main_sliceplane();
       main_VolumeRendering();
       main_streamlines();
+      main_LIC();
     </script>
   </body>
 </html>
