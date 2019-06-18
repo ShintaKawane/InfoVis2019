@@ -30,24 +30,10 @@ function main_VolumeRendering()
     var trackball = new THREE.TrackballControls(camera, renderer.domElement);
     trackball.rotateSpeed = 3.0;
 
-    var geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
-    var material = new THREE.MeshLambertMaterial({color:0xff8080});
-    material.opacity = 0.5;
-    material.transparent = true;
-    var cube = new THREE.Mesh(geometry, material);
-    cube.position.set(1,1,1);
-    scene_volume.add(cube);
-
     var bounds = new Bounds(new THREE.Vector3(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2),
     new THREE.Vector3(volume.dimx/2,volume.dimy/2,volume.dimz/2));
     scene_volume.add(bounds);
     
-    //var isovalue = document.getElementById("isovalue").value;
-    var p = [5, 2, -4, 3];
-    var plane = SlicePlane(volume, p);
-    plane.position.set(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2);
-    scene_volume.add(plane);
-    //VolumeRender(width, height, camera, renderer, plane);
     document.addEventListener('mousedown', VolumeRender(width, height, camera, renderer, plane));
 
     var setss = VolumeRender(width, height, camera, renderer, plane);

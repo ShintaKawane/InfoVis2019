@@ -31,14 +31,6 @@ function main_sliceplane()
     var trackball = new THREE.TrackballControls(camera, renderer.domElement);
     trackball.rotateSpeed = 3.0;
 
-    var geometry = new THREE.BoxGeometry(0.5,0.5,0.5);
-    var material = new THREE.MeshLambertMaterial({color:0xff8080});
-    material.opacity = 0.5;
-    material.transparent = true;
-    var cube = new THREE.Mesh(geometry, material);
-    cube.position.set(1,1,1);
-    scene_slice.add(cube);
-
     var bounds = new Bounds(new THREE.Vector3(-volume.dimx/2,-volume.dimy/2,-volume.dimz/2),
     new THREE.Vector3(volume.dimx/2,volume.dimy/2,volume.dimz/2));
     scene_slice.add(bounds);
